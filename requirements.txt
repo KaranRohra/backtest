@@ -1,0 +1,11 @@
+deno==2.9.8
+imageio-ffmpeg==0.6.0
+kiteconnect==5.2.2
+numpy==2.5.4
+pandas==3.1.0
+pyarrow==26.0.0
+PyOTP==2.10.0
+python-dotenv==1.2.4
+requests==2.34.2
+tabulate==0.10.0
+yt-dlp==2026.10.26

@@ -1,0 +1,24 @@
+{
+  "title": "Strategy Name",
+  "creator": "Channel name",
+  "video_url": "https://www.youtube.com/watch?v=...",
+  "symbols": ["NSE:NIFTY 50"],
+  "benchmark": "NSE:NIFTY 50",
+  "interval": "day",
+  "years": 3,
+  "warmup_days": 60,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "percent",
+    "size": 1.0,
+    "sl_pct": null,
+    "target_pct": null,
+    "trail_pct": null,
+    "intraday": false,
+    "squareoff": "15:15",
+    "allow_short": true
+  },
+  "grid": {},
+  "oos_months": 12
+}

@@ -1,0 +1,24 @@
+# Secrets
+.env
+.kite_token.json
+
+# Environment / caches
+.venv/
+__pycache__/
+_models/
+.DS_Store
+
+# Market data comes from each user's own Kite account (not redistributable)
+data/
+
+# Private channel tooling
+brokers/
+remotion/
+core/video.py
+WORKFLOW.md
+
+# Per-backtest private material: creator transcripts, videos, Short scripts
+backtests/*/source/
+backtests/*/video/
+backtests/*/short/
+backtests/E00_*/

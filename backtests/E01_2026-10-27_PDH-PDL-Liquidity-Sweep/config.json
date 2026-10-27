@@ -1,0 +1,27 @@
+{
+  "title": "PDH/PDL Liquidity Sweep",
+  "creator": "Stock Learners (Gautam Jha)",
+  "video_url": "https://www.youtube.com/watch?v=wI9b968AvW8",
+  "symbols": ["NSE:NIFTY 50", "NSE:NIFTY BANK"],
+  "separate": true,
+  "interval": "minute",
+  "timeframe_label": "1-min",
+  "years": 3,
+  "warmup_days": 5,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 5,
+    "intraday": true,
+    "squareoff": "15:15"
+  },
+  "grid": {
+    "trigger": ["low", "body"],
+    "max_sl_pct": [0.1, 0.2, 0.3, 100],
+    "pivot": [3, 5, 10],
+    "partial": [0.5, 0.8, 1.0]
+  },
+  "oos_months": 12
+}
