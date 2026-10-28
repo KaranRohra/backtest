@@ -7,9 +7,9 @@
 - **What we found:** about 21–23% wins at about 1:4. There's a small edge before costs, but it is smaller than the cost of trading.
 - **Markets:** spot gold (XAUUSD, the market used in the video), NIFTY 50 and BANK NIFTY, each tested separately on 1-minute candles.
 
-| Equity + stats | Drawdown + stats |
+| Equity + stats | Drawdown |
 |---|---|
-| ![Equity and stats](images/compare_results.png) | ![Drawdown and stats](images/compare_drawdown.png) |
+| ![Equity and stats](images/compare_results.png) | ![Drawdown](images/compare_drawdown.png) |
 
 ## Results (26 Oct 2023 → 26 Oct 2026, 1-minute, before costs, same starting capital)
 

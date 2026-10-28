@@ -6,9 +6,9 @@
 - **Creator's claim:** <what the video promises>
 - **What we found:** <one line>
 
-| Equity + stats | Drawdown + stats |
+| Equity + stats | Drawdown |
 |---|---|
-| ![Equity and stats](images/compare_results.png) | ![Drawdown and stats](images/compare_drawdown.png) |
+| ![Equity and stats](images/compare_results.png) | ![Drawdown](images/compare_drawdown.png) |
 
 ## Results (<period>, <timeframe>, before costs)
 <key numbers per instrument; full stats in results/*/summary.md>

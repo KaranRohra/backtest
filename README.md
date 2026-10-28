@@ -24,7 +24,7 @@ backtests/E01_<date>_<Strategy-Name>/
   strategy.py      the rules as code
   config.json      instruments, period, position sizing, parameters tested
   results/         summary.md · trades.csv (every trade) · equity.csv · stats.json · sensitivity.csv
-  images/          result cards (equity, drawdown, stats)
+  images/          result cards (equity + stats, drawdown)
 ```
 
 ## Run it yourself
