@@ -1,8 +1,8 @@
 # Backtest Series
 
-Trading strategies from YouTube, tested on real Indian market data.
+Trading strategies from YouTube, tested on real market data: Indian indices and gold.
 
-Each episode takes one strategy from a YouTube video, writes its rules down as exactly as the video allows, and backtests it on 1–3 years of NSE data from Zerodha Kite. Everything is here: the code, every trade, and the assumptions made where the video was vague. You can check the work or run it yourself.
+Each episode takes one strategy from a YouTube video, writes its rules down as exactly as the video allows, and backtests it on 1–3 years of real data: NSE prices from Zerodha Kite, and spot gold from Dukascopy. Everything is here: the code, every trade, and the assumptions made where the video was vague. You can check the work or run it yourself.
 
 ## Leaderboard
 
@@ -11,6 +11,7 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---|
 | E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | NIFTY 50 · 1-min | 939 | 22% | 1.09 | +20.7% | +19.6% | -23.7% | ⚠️ Mixed |
 | E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | NIFTY BANK · 1-min | 894 | 23% | 1.25 | +76.8% | +27.4% | -12.2% | ⚠️ Mixed |
+| E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | Gold (XAUUSD) · 1-min | 1136 | 21% | 1.02 | +6.1% | +102.0% | -25.8% | ⚠️ Mixed |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).
@@ -28,13 +29,15 @@ backtests/E01_<date>_<Strategy-Name>/
 
 ## Run it yourself
 
-You need Python 3.11+ and a [Kite Connect](https://developers.kite.trade) app with historical data access, because the market data comes from your own Zerodha account and isn't included in this repo.
+You need Python 3.11+. Market data isn't included in this repo; it's downloaded on first run.
+- **Gold (XAUUSD):** free from Dukascopy, no account needed.
+- **NSE stocks and indices:** need a [Kite Connect](https://developers.kite.trade) app with historical data access, because the data comes from your own Zerodha account.
 
 ```bash
 git clone https://github.com/KaranRohra/backtest.git && cd backtest
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env            # add KITE_API_KEY and KITE_API_SECRET
+cp .env.example .env            # add KITE_API_KEY and KITE_API_SECRET (only needed for NSE data)
 
 python run.py E01_2026-10-27_PDH-PDL-Liquidity-Sweep --no-video
 python -m tests.test_engine     # engine checks: fills, no lookahead, stops, square-off

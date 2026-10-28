@@ -72,10 +72,10 @@ def update_leaderboard(sb):
              "|---|---|---|---|---:|---:|---:|---:|---:|---:|---|"]
     for r in sb.itertuples():
         folder = r.episode.split(" [")[0]
-        market = r.symbols.replace("NSE:", "").replace("NFO:", "")
+        market = " ".join(s.split(":", 1)[-1] for s in r.symbols.split(" NSE:")).replace("XAUUSD", "Gold (XAUUSD)")
         tf = {"minute": "1-min", "day": "daily"}.get(r.interval, r.interval)
         lines.append(f"| {folder.split('_')[0]} | [{r.strategy}](backtests/{folder}) | {r.creator} | {market} · {tf} | "
-                     f"{r.trades} | {r.win_rate_pct:.0f}% | {r.profit_factor:.2f} | {r.return_pct:+.1f}% | "
+                     f"{r.trades} | {int(r.win_rate_pct + 0.5)}% | {r.profit_factor:.2f} | {r.return_pct:+.1f}% | "
                      f"{r.bh_return_pct:+.1f}% | {r.max_dd_pct:.1f}% | {VERDICT_ICON.get(r.verdict, r.verdict)} |")
     head, rest = text.split(start, 1)
     README.write_text(head + start + "\n" + "\n".join(lines) + "\n" + end + rest.split(end, 1)[1])
@@ -83,8 +83,11 @@ def update_leaderboard(sb):
 
 def run_one(ep, cfg, strat, symbols, tag):
     """One backtest over `symbols`; outputs go to results/<tag>/. Returns what the video needs."""
-    params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {})}
-    settings = Settings(**cfg.get("settings", {}))
+    # per-symbol overrides, e.g. {"overrides": {"DUKAS:XAUUSD": {"params": {...}, "settings": {...}, "grid": {...}}}}
+    ov = cfg.get("overrides", {}).get(symbols[0], {}) if len(symbols) == 1 else {}
+    params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {}), **ov.get("params", {})}
+    settings = Settings(**{**cfg.get("settings", {}), **ov.get("settings", {})})
+    grid = ov.get("grid", cfg.get("grid"))
     start, end = window(cfg)
     fetch_from = start - timedelta(days=cfg.get("warmup_days", 0))
 
@@ -111,8 +114,8 @@ def run_one(ep, cfg, strat, symbols, tag):
     trades.to_csv(res / "trades.csv", index=False)
     daily = lambda x: x.resample("D").last().dropna()  # noqa: E731 - keep csv small for intraday data
     pd.concat([daily(eq), daily(bh)], axis=1).ffill().to_csv(res / "equity.csv")
-    if cfg.get("grid"):
-        sens = sensitivity(data, strat, params, settings, start, cfg["grid"])
+    if grid:
+        sens = sensitivity(data, strat, params, settings, start, grid)
         sens.to_csv(res / "sensitivity.csv", index=False)
 
     names = ", ".join(s.split(":")[1] for s in symbols)
@@ -133,12 +136,12 @@ def run_one(ep, cfg, strat, symbols, tag):
                                                 for c in cells) + " |")
     if full.get("exit_reasons"):
         md += ["", "Exits: " + ", ".join(f"{k} {n}" for k, n in full["exit_reasons"].items())]
-    if cfg.get("grid"):
+    if grid:
         md += ["", "## Parameter sensitivity (one at a time)", "", sens.round(2).to_markdown(index=False)]
     (res / "summary.md").write_text("\n".join(md) + "\n")
     update_scoreboard(ep, cfg, symbols, tag, full, v)
     print("\n".join(md), "\n")
-    return {"name": names, "eq": eq, "bh": bh, "stats": full, "verdict": v}
+    return {"name": names, "symbols": symbols, "eq": eq, "bh": bh, "stats": full, "verdict": v}
 
 
 def main():
@@ -148,6 +151,10 @@ def main():
     a = ap.parse_args()
     ep = next(p for p in (BACKTESTS / a.episode, ROOT / a.episode) if p.exists()).resolve()
     cfg = json.loads((ep / "config.json").read_text())
+    if not (cfg.get("start") and cfg.get("end")):  # pin the window on first run so published results stay reproducible
+        start, end = window(cfg)
+        cfg = {**cfg, "start": f"{start:%Y-%m-%d}", "end": f"{end:%Y-%m-%d}"}
+        (ep / "config.json").write_text(json.dumps(cfg, indent=2) + "\n")
     strat = load_strategy(ep)
     if cfg.get("separate"):  # each symbol is its own backtest; the video compares them
         results = [run_one(ep, cfg, strat, [s], s.split(":")[1].replace(" ", "_")) for s in cfg["symbols"]]

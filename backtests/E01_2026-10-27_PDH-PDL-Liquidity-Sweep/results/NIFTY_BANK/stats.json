@@ -9,6 +9,8 @@
  "params": {
   "trigger": "low",
   "max_sl_pct": 0.2,
+  "max_sl_points": null,
+  "session": "nse",
   "pivot": 5,
   "partial": 0.8,
   "max_trades": 3,

@@ -1,13 +1,15 @@
 # Methodology
 
 ## Data
-- **Source:** Zerodha Kite historical API (`core/datastore.py`). Symbols are `EXCHANGE:TRADINGSYMBOL`, e.g. `NSE:RELIANCE`, `NSE:NIFTY 50`, `NSE:NIFTY BANK`. `NFO:NIFTY-FUT` means continuous front-month futures (daily candles only).
+- **Sources** (`core/datastore.py`):
+  - **NSE:** the Zerodha Kite historical API. Symbols are `EXCHANGE:TRADINGSYMBOL`, e.g. `NSE:RELIANCE`, `NSE:NIFTY 50`, `NSE:NIFTY BANK`. `NFO:NIFTY-FUT` means continuous front-month futures (daily candles only). Timestamps are IST.
+  - **Spot gold / forex:** Dukascopy Bank's free historical feed (bid prices), as `DUKAS:XAUUSD`. Timestamps are UTC. Gold's trading day runs from one 17:00 New York close to the next, the usual broker day.
 - **Storage:** only daily and 1-minute candles are stored (`data/day/`, `data/minute/`, parquet). 3/5/10/15/30/60-minute candles are built from 1-minute data, aligned to the 09:15 open like Kite's own charts.
 - **Caching:** requests are chunked to Kite's per-request limits and cached, so a re-run downloads only new days.
 - **Limits:**
   - Kite has no data for expired option contracts, and continuous futures are daily-only.
   - Option strategies can only be approximated on the underlying index or stock.
-  - Multi-year intraday tests use the NSE spot index.
+  - Multi-year intraday tests use the NSE spot index, or spot gold from Dukascopy.
 
 ## Execution rules (`core/engine.py`)
 - **No lookahead:** a signal decided on a candle's close fills at the **next candle's open**. A test checks that changing future prices never changes past trades.

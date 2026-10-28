@@ -1,3 +1,4 @@
 episode,strategy,creator,symbols,interval,period,trades,win_rate_pct,profit_factor,return_pct,cagr_pct,max_dd_pct,bh_return_pct,verdict
 E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_50],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY 50,minute,2023-10-26..2026-10-26,939,22.2,1.09,20.7,6.7,-23.7,19.6,MIXED
 E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_BANK],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY BANK,minute,2023-10-26..2026-10-26,894,22.7,1.25,76.8,21.3,-12.2,27.4,MIXED
+E01_2026-10-27_PDH-PDL-Liquidity-Sweep [XAUUSD],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),DUKAS:XAUUSD,minute,2023-10-26..2026-10-26,1136,20.5,1.02,6.1,2.0,-25.8,102.0,MIXED

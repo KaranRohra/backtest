@@ -11,6 +11,7 @@ symbol, so a re-run only fetches what is missing (usually nothing).
 
 Symbols are "EXCHANGE:TRADINGSYMBOL" as in data/kite_instruments.csv (downloaded on first use).
 Futures: "NFO:NIFTY-FUT" = continuous front-month (Kite continuous=True).
+Spot forex / metals from Dukascopy: "DUKAS:XAUUSD" (bid prices, timestamps in UTC, not IST).
 """
 import json
 import time
@@ -118,6 +119,37 @@ def _fetch(token: int, interval: str, start: date, end: date, continuous: bool) 
     return df.set_index("date").reindex(columns=COLS)
 
 
+DUKAS_INTERVALS = {"minute": "INTERVAL_MIN_1", "day": "INTERVAL_DAY_1"}
+
+
+def _fetch_dukas(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
+    """Dukascopy bid candles, one month per request; returned with naive UTC timestamps."""
+    from datetime import timezone
+
+    import dukascopy_python as dk
+    from dukascopy_python import instruments as di
+
+    pair = symbol.split(":", 1)[1]
+    inst = getattr(di, f"INSTRUMENT_FX_METALS_{pair[:3]}_{pair[3:]}", None) or getattr(
+        di, f"INSTRUMENT_FX_MAJORS_{pair[:3]}_{pair[3:]}")
+    frames, cur = [], start
+    while cur <= end:
+        to = min((pd.Timestamp(cur) + pd.offsets.MonthBegin(1)).date() - timedelta(days=1), end)
+        a = datetime.combine(cur, datetime.min.time(), tzinfo=timezone.utc)  # explicit UTC: the library assumes local time
+        b = datetime.combine(to + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc)
+        df = dk.fetch(inst, getattr(dk, DUKAS_INTERVALS[interval]), dk.OFFER_SIDE_BID, a, b)
+        print(f"  fetched {interval} {cur}..{to}: {len(df)} candles")
+        if len(df):
+            frames.append(df)
+        cur = to + timedelta(days=1)
+    if not frames:
+        return pd.DataFrame(columns=COLS)
+    df = pd.concat(frames)
+    df.index = df.index.tz_convert("UTC").tz_localize(None)
+    df = df[df.index < pd.Timestamp(end + timedelta(days=1))]
+    return df.reindex(columns=COLS)
+
+
 def _ensure(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
     """Return stored candles for symbol, fetching any missing head/tail first."""
     path = _path(symbol, interval)
@@ -141,9 +173,13 @@ def _ensure(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
     if not gaps:
         return df
 
-    token, continuous = resolve(symbol)
     print(f"{symbol} [{interval}] fetching {', '.join(f'{a}..{b}' for a, b in gaps)}")
-    new = [_fetch(token, interval, a, b, continuous) for a, b in gaps]
+    if symbol.startswith("DUKAS:"):
+        token = None
+        new = [_fetch_dukas(symbol, interval, a, b) for a, b in gaps]
+    else:
+        token, continuous = resolve(symbol)
+        new = [_fetch(token, interval, a, b, continuous) for a, b in gaps]
     df = pd.concat([df, *new])
     dupes = df.index.duplicated(keep="last")
     df = df[~dupes].sort_index()
