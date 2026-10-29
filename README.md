@@ -12,6 +12,8 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 | E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | NIFTY 50 · 1-min | 939 | 22% | 1.09 | +20.7% | +19.6% | -23.7% | ⚠️ Mixed |
 | E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | NIFTY BANK · 1-min | 894 | 23% | 1.25 | +76.8% | +27.4% | -12.2% | ⚠️ Mixed |
 | E01 | [PDH/PDL Liquidity Sweep](backtests/E01_2026-10-27_PDH-PDL-Liquidity-Sweep) | Stock Learners (Gautam Jha) | Gold (XAUUSD) · 1-min | 1136 | 21% | 1.02 | +6.1% | +102.0% | -25.8% | ⚠️ Mixed |
+| E02 | [5 EMA Alert Candle](backtests/E02_2026-10-29_5-EMA-Alert-Candle) | Power of Stocks (Subhasish Pani) | NIFTY 50 · 5 & 15-min | 2990 | 30% | 1.04 | +54.5% | +19.6% | -32.3% | ⚠️ Mixed |
+| E02 | [5 EMA Alert Candle](backtests/E02_2026-10-29_5-EMA-Alert-Candle) | Power of Stocks (Subhasish Pani) | NIFTY BANK · 5 & 15-min | 2856 | 29% | 0.99 | -11.0% | +27.4% | -34.9% | ❌ Fails |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).
