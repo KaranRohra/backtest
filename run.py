@@ -52,7 +52,7 @@ def sensitivity(data, strat, params, settings, start, grid):
 def update_scoreboard(ep, cfg, symbols, tag, st, v):
     row = {"episode": ep.name + (f" [{tag}]" if tag else ""), "strategy": cfg["title"],
            "creator": cfg.get("creator", ""), "symbols": " ".join(symbols), "interval": cfg.get("timeframe_label", cfg["interval"]), "period": f"{st['start']}..{st['end']}",
-           "trades": st["n_trades"], "win_rate_pct": round(st.get("win_rate_pct", 0), 1),
+           "trades": st["n_trades"], "win_rate_pct": round(st.get("win_rate_pct", 0), 2),
            "profit_factor": round(st.get("profit_factor", 0), 2), "return_pct": round(st["total_return_pct"], 1),
            "cagr_pct": round(st["cagr_pct"], 1), "max_dd_pct": round(st["max_drawdown_pct"], 1),
            "bh_return_pct": round(st.get("bh_total_return_pct", 0), 1), "verdict": v}

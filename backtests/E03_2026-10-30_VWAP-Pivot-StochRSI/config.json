@@ -1,0 +1,38 @@
+{
+  "title": "VWAP + Pivots + Stoch RSI",
+  "creator": "Anish Singh Thakur (Booming Bulls)",
+  "video_url": "https://www.youtube.com/watch?v=8OurAiVyhE4",
+  "symbols": [
+    "NSE:BAJFINANCE",
+    "NSE:HDFCBANK",
+    "NSE:RELIANCE"
+  ],
+  "separate": true,
+  "interval": "minute",
+  "timeframe_label": "5-min",
+  "start": "2023-10-26",
+  "end": "2026-10-26",
+  "warmup_days": 10,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 5,
+    "intraday": true,
+    "squareoff": "15:15"
+  },
+  "grid": {
+    "sl": ["pct", "vwap"],
+    "stoch": [true, false],
+    "entry": ["break", "close"],
+    "target_pct": [0.75, 1.0, 1.5],
+    "first_entry": ["09:20", "10:45"],
+    "max_trades": [1, 2]
+  },
+  "oos_months": 12,
+  "labels": {
+    "BAJFINANCE": "BAJAJ FINANCE",
+    "HDFCBANK": "HDFC BANK"
+  }
+}

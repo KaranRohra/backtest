@@ -1,6 +1,9 @@
 episode,strategy,creator,symbols,interval,period,trades,win_rate_pct,profit_factor,return_pct,cagr_pct,max_dd_pct,bh_return_pct,verdict
-E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_50],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY 50,1-min,2023-10-26..2026-10-26,939,22.2,1.09,20.7,6.7,-23.7,19.6,MIXED
-E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_BANK],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY BANK,1-min,2023-10-26..2026-10-26,894,22.7,1.25,76.8,21.3,-12.2,27.4,MIXED
-E01_2026-10-27_PDH-PDL-Liquidity-Sweep [XAUUSD],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),DUKAS:XAUUSD,1-min,2023-10-26..2026-10-26,1136,20.5,1.02,6.1,2.0,-25.8,102.0,MIXED
-E02_2026-10-29_5-EMA-Alert-Candle [NIFTY_50],5 EMA Alert Candle,Power of Stocks (Subhasish Pani),NSE:NIFTY 50,5 & 15-min,2023-10-26..2026-10-26,2990,29.6,1.04,54.5,16.2,-32.3,19.6,MIXED
-E02_2026-10-29_5-EMA-Alert-Candle [NIFTY_BANK],5 EMA Alert Candle,Power of Stocks (Subhasish Pani),NSE:NIFTY BANK,5 & 15-min,2023-10-26..2026-10-26,2856,29.0,0.99,-11.0,-3.0,-34.9,27.4,FAILS
+E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_50],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY 50,1-min,2023-10-26..2026-10-26,939,22.15,1.09,20.7,6.7,-23.7,19.6,MIXED
+E01_2026-10-27_PDH-PDL-Liquidity-Sweep [NIFTY_BANK],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),NSE:NIFTY BANK,1-min,2023-10-26..2026-10-26,894,22.71,1.25,76.8,21.3,-12.2,27.4,MIXED
+E01_2026-10-27_PDH-PDL-Liquidity-Sweep [XAUUSD],PDH/PDL Liquidity Sweep,Stock Learners (Gautam Jha),DUKAS:XAUUSD,1-min,2023-10-26..2026-10-26,1136,20.51,1.02,6.1,2.0,-25.8,102.0,MIXED
+E02_2026-10-29_5-EMA-Alert-Candle [NIFTY_50],5 EMA Alert Candle,Power of Stocks (Subhasish Pani),NSE:NIFTY 50,5 & 15-min,2023-10-26..2026-10-26,2990,29.63,1.04,54.5,16.2,-32.3,19.6,MIXED
+E02_2026-10-29_5-EMA-Alert-Candle [NIFTY_BANK],5 EMA Alert Candle,Power of Stocks (Subhasish Pani),NSE:NIFTY BANK,5 & 15-min,2023-10-26..2026-10-26,2856,29.03,0.99,-11.0,-3.0,-34.9,27.4,FAILS
+E03_2026-10-30_VWAP-Pivot-StochRSI [BAJFINANCE],VWAP + Pivots + Stoch RSI,Anish Singh Thakur (Booming Bulls),NSE:BAJFINANCE,5-min,2023-10-26..2026-10-26,1003,43.47,1.17,124.3,31.0,-18.6,20.1,MIXED
+E03_2026-10-30_VWAP-Pivot-StochRSI [HDFCBANK],VWAP + Pivots + Stoch RSI,Anish Singh Thakur (Booming Bulls),NSE:HDFCBANK,5-min,2023-10-26..2026-10-26,924,48.48,1.12,57.3,15.8,-22.4,-7.3,MIXED
+E03_2026-10-30_VWAP-Pivot-StochRSI [RELIANCE],VWAP + Pivots + Stoch RSI,Anish Singh Thakur (Booming Bulls),NSE:RELIANCE,5-min,2023-10-26..2026-10-26,967,46.23,1.14,86.5,22.7,-26.7,6.7,MIXED
