@@ -17,6 +17,9 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 | E03 | [VWAP + Pivots + Stoch RSI](backtests/E03_2026-10-30_VWAP-Pivot-StochRSI) | Anish Singh Thakur (Booming Bulls) | BAJFINANCE · 5-min | 1003 | 43% | 1.17 | +124.3% | +20.1% | -18.6% | ⚠️ Mixed |
 | E03 | [VWAP + Pivots + Stoch RSI](backtests/E03_2026-10-30_VWAP-Pivot-StochRSI) | Anish Singh Thakur (Booming Bulls) | HDFCBANK · 5-min | 924 | 48% | 1.12 | +57.3% | -7.3% | -22.4% | ⚠️ Mixed |
 | E03 | [VWAP + Pivots + Stoch RSI](backtests/E03_2026-10-30_VWAP-Pivot-StochRSI) | Anish Singh Thakur (Booming Bulls) | RELIANCE · 5-min | 967 | 46% | 1.14 | +86.5% | +6.7% | -26.7% | ⚠️ Mixed |
+| E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | Bitcoin (BTC/USDT) · 15-min | 4138 | 51% | 1.02 | +44.6% | +132.5% | -35.9% | ⚠️ Mixed |
+| E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | NIFTY 50 · 15-min | 602 | 51% | 1.05 | +11.1% | +19.6% | -14.7% | ⚠️ Mixed |
+| E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | Gold (XAUUSD) · 15-min | 735 | 52% | 1.06 | +16.7% | +102.0% | -21.7% | ⚠️ Mixed |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).

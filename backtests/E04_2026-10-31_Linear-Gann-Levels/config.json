@@ -1,0 +1,47 @@
+{
+  "title": "Linear Gann Levels",
+  "creator": "Adib Noorani (on Trading Titans by InCred Money)",
+  "video_url": "https://www.youtube.com/watch?v=ZaniJwJIwJg",
+  "symbols": [
+    "NSE:NIFTY 50",
+    "DUKAS:XAUUSD",
+    "BINANCE:BTCUSDT"
+  ],
+  "separate": true,
+  "interval": "minute",
+  "timeframe_label": "15-min",
+  "start": "2023-10-26",
+  "end": "2026-10-26",
+  "warmup_days": 5,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 5,
+    "intraday": true,
+    "squareoff": "15:15"
+  },
+  "grid": {
+    "tol_pct": [0.02, 0.1, 0.2],
+    "valid_bars": [1, 2, 4],
+    "rr": [1.0, 1.5, 2.0],
+    "marubozu": [true, false],
+    "max_sl": [1, 2, 99]
+  },
+  "overrides": {
+    "DUKAS:XAUUSD": {
+      "params": {"session": "fx", "first_entry": "00:15", "last_entry": "23:30"},
+      "settings": {"squareoff": "23:55"}
+    },
+    "BINANCE:BTCUSDT": {
+      "params": {"session": "utc", "first_entry": "00:15", "last_entry": "23:30"},
+      "settings": {"squareoff": "23:55"}
+    }
+  },
+  "oos_months": 12,
+  "labels": {
+    "XAUUSD": "GOLD",
+    "BTCUSDT": "BITCOIN"
+  }
+}

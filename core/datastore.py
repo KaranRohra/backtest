@@ -12,6 +12,7 @@ symbol, so a re-run only fetches what is missing (usually nothing).
 Symbols are "EXCHANGE:TRADINGSYMBOL" as in data/kite_instruments.csv (downloaded on first use).
 Futures: "NFO:NIFTY-FUT" = continuous front-month (Kite continuous=True).
 Spot forex / metals from Dukascopy: "DUKAS:XAUUSD" (bid prices, timestamps in UTC, not IST).
+Crypto spot from Binance's public archive: "BINANCE:BTCUSDT" (trade prices, timestamps in UTC, not IST).
 """
 import json
 import time
@@ -150,6 +151,61 @@ def _fetch_dukas(symbol: str, interval: str, start: date, end: date) -> pd.DataF
     return df.reindex(columns=COLS)
 
 
+BINANCE_URL = "https://data.binance.vision/data/spot"
+BINANCE_INTERVALS = {"minute": "1m", "day": "1d"}
+
+
+def _fetch_binance(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
+    """Binance spot klines from data.binance.vision (free, no account): a zip per finished month, per day otherwise.
+
+    Returned with naive UTC timestamps (candle open time)."""
+    import io
+    import ssl
+    import urllib.error
+    import urllib.request
+    import zipfile
+
+    import certifi
+
+    ctx = ssl.create_default_context(cafile=certifi.where())  # python.org builds on macOS ship without CA certs
+    pair, iv = symbol.split(":", 1)[1], BINANCE_INTERVALS[interval]
+    this_month = date.today().replace(day=1)
+
+    def get(url):
+        try:
+            with urllib.request.urlopen(url, timeout=60, context=ctx) as r:
+                z = zipfile.ZipFile(io.BytesIO(r.read()))
+        except urllib.error.HTTPError as e:
+            if e.code == 404:  # not published yet (e.g. today)
+                return None
+            raise
+        with z.open(z.namelist()[0]) as f:
+            return pd.read_csv(f, header=None, usecols=range(6), names=["ts", *COLS[:5]])
+
+    frames, cur = [], start.replace(day=1)
+    while cur <= end:
+        nxt = (pd.Timestamp(cur) + pd.offsets.MonthBegin(1)).date()
+        if nxt <= this_month:  # finished month: one monthly file
+            parts = [get(f"{BINANCE_URL}/monthly/klines/{pair}/{iv}/{pair}-{iv}-{cur:%Y-%m}.zip")]
+        else:  # current month: daily files
+            days = pd.date_range(max(cur, start), min(end, date.today() - timedelta(days=1)))
+            parts = [get(f"{BINANCE_URL}/daily/klines/{pair}/{iv}/{pair}-{iv}-{d:%Y-%m-%d}.zip") for d in days]
+        parts = [x for x in parts if x is not None and len(x)]
+        if parts:
+            df = pd.concat(parts)
+            print(f"  fetched {interval} {cur:%Y-%m}: {len(df)} candles")
+            frames.append(df)
+        cur = nxt
+    if not frames:
+        return pd.DataFrame(columns=COLS)
+    df = pd.concat(frames)
+    unit = df.ts.where(df.ts < 1e14, df.ts // 1000)  # files from 2025 on use microseconds
+    df.index = pd.to_datetime(unit, unit="ms")
+    df = df.drop(columns="ts")
+    df = df[(df.index >= pd.Timestamp(start)) & (df.index < pd.Timestamp(end + timedelta(days=1)))]
+    return df.reindex(columns=COLS)
+
+
 def _ensure(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
     """Return stored candles for symbol, fetching any missing head/tail first."""
     path = _path(symbol, interval)
@@ -177,6 +233,9 @@ def _ensure(symbol: str, interval: str, start: date, end: date) -> pd.DataFrame:
     if symbol.startswith("DUKAS:"):
         token = None
         new = [_fetch_dukas(symbol, interval, a, b) for a, b in gaps]
+    elif symbol.startswith("BINANCE:"):
+        token = None
+        new = [_fetch_binance(symbol, interval, a, b) for a, b in gaps]
     else:
         token, continuous = resolve(symbol)
         new = [_fetch(token, interval, a, b, continuous) for a, b in gaps]

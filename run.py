@@ -72,7 +72,7 @@ def update_leaderboard(sb):
              "|---|---|---|---|---:|---:|---:|---:|---:|---:|---|"]
     for r in sb.itertuples():
         folder = r.episode.split(" [")[0]
-        market = " ".join(s.split(":", 1)[-1] for s in r.symbols.split(" NSE:")).replace("XAUUSD", "Gold (XAUUSD)")
+        market = " ".join(s.split(":", 1)[-1] for s in r.symbols.split(" NSE:")).replace("XAUUSD", "Gold (XAUUSD)").replace("BTCUSDT", "Bitcoin (BTC/USDT)")
         tf = {"minute": "1-min", "day": "daily"}.get(r.interval, r.interval)
         lines.append(f"| {folder.split('_')[0]} | [{r.strategy}](backtests/{folder}) | {r.creator} | {market} · {tf} | "
                      f"{r.trades} | {int(r.win_rate_pct + 0.5)}% | {r.profit_factor:.2f} | {r.return_pct:+.1f}% | "
@@ -81,13 +81,16 @@ def update_leaderboard(sb):
     README.write_text(head + start + "\n" + "\n".join(lines) + "\n" + end + rest.split(end, 1)[1])
 
 
-def run_one(ep, cfg, strat, symbols, tag):
-    """One backtest over `symbols`; outputs go to results/<tag>/. Returns what the video needs."""
+def run_one(ep, cfg, strat, symbols, tag, variant=None):
+    """One backtest over `symbols`; outputs go to results/<tag>/. Returns what the video needs.
+
+    `variant` ({"label", "params", "grid"}) runs the same market with different rules, e.g. all setups vs filtered."""
     # per-symbol overrides, e.g. {"overrides": {"DUKAS:XAUUSD": {"params": {...}, "settings": {...}, "grid": {...}}}}
     ov = cfg.get("overrides", {}).get(symbols[0], {}) if len(symbols) == 1 else {}
-    params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {}), **ov.get("params", {})}
+    var = variant or {}
+    params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {}), **ov.get("params", {}), **var.get("params", {})}
     settings = Settings(**{**cfg.get("settings", {}), **ov.get("settings", {})})
-    grid = ov.get("grid", cfg.get("grid"))
+    grid = var.get("grid", ov.get("grid", cfg.get("grid")))
     start, end = window(cfg)
     fetch_from = start - timedelta(days=cfg.get("warmup_days", 0))
 
@@ -118,7 +121,7 @@ def run_one(ep, cfg, strat, symbols, tag):
         sens = sensitivity(data, strat, params, settings, start, grid)
         sens.to_csv(res / "sensitivity.csv", index=False)
 
-    names = ", ".join(s.split(":")[1] for s in symbols)
+    names = var.get("label") or ", ".join(s.split(":")[1] for s in symbols)
 
     md = [f"# {cfg['title']} — {names} — {v}", "", *[f"- {r}" for r in reasons], "",
           f"Period {full['start']} → {full['end']} · {cfg['interval']} · **before costs** · OOS from {split.date()}",
@@ -139,7 +142,7 @@ def run_one(ep, cfg, strat, symbols, tag):
     if grid:
         md += ["", "## Parameter sensitivity (one at a time)", "", sens.round(2).to_markdown(index=False)]
     (res / "summary.md").write_text("\n".join(md) + "\n")
-    update_scoreboard(ep, cfg, symbols, tag, full, v)
+    update_scoreboard(ep, {**cfg, "title": f"{cfg['title']} ({var['label'].lower()})"} if var else cfg, symbols, tag, full, v)
     print("\n".join(md), "\n")
     return {"name": names, "symbols": symbols, "eq": eq, "bh": bh, "stats": full, "verdict": v}
 
@@ -156,7 +159,9 @@ def main():
         cfg = {**cfg, "start": f"{start:%Y-%m-%d}", "end": f"{end:%Y-%m-%d}"}
         (ep / "config.json").write_text(json.dumps(cfg, indent=2) + "\n")
     strat = load_strategy(ep)
-    if cfg.get("separate"):  # each symbol is its own backtest; the video compares them
+    if cfg.get("variants"):  # one market, several rule sets side by side (e.g. all setups vs filtered)
+        results = [run_one(ep, cfg, strat, cfg["symbols"], tag, var) for tag, var in cfg["variants"].items()]
+    elif cfg.get("separate"):  # each symbol is its own backtest; the video compares them
         results = [run_one(ep, cfg, strat, [s], s.split(":")[1].replace(" ", "_")) for s in cfg["symbols"]]
     else:
         results = [run_one(ep, cfg, strat, cfg["symbols"], None)]
