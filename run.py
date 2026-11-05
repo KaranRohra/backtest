@@ -84,7 +84,8 @@ def update_leaderboard(sb):
 def run_one(ep, cfg, strat, symbols, tag, variant=None):
     """One backtest over `symbols`; outputs go to results/<tag>/. Returns what the video needs.
 
-    `variant` ({"label", "params", "grid"}) runs the same market with different rules, e.g. all setups vs filtered."""
+    `variant` ({"label", "params", "grid", "board"}) runs the same market with different rules, e.g. all setups vs
+    filtered. "board" is the variant's name on the leaderboard (default: the label in lower case)."""
     # per-symbol overrides, e.g. {"overrides": {"DUKAS:XAUUSD": {"params": {...}, "settings": {...}, "grid": {...}}}}
     ov = cfg.get("overrides", {}).get(symbols[0], {}) if len(symbols) == 1 else {}
     var = variant or {}
@@ -142,7 +143,7 @@ def run_one(ep, cfg, strat, symbols, tag, variant=None):
     if grid:
         md += ["", "## Parameter sensitivity (one at a time)", "", sens.round(2).to_markdown(index=False)]
     (res / "summary.md").write_text("\n".join(md) + "\n")
-    update_scoreboard(ep, {**cfg, "title": f"{cfg['title']} ({var['label'].lower()})"} if var else cfg, symbols, tag, full, v)
+    update_scoreboard(ep, {**cfg, "title": f"{cfg['title']} ({var.get('board', var['label'].lower())})"} if var else cfg, symbols, tag, full, v)
     print("\n".join(md), "\n")
     return {"name": names, "symbols": symbols, "eq": eq, "bh": bh, "stats": full, "verdict": v}
 

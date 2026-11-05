@@ -20,6 +20,9 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 | E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | Bitcoin (BTC/USDT) · 15-min | 4138 | 51% | 1.02 | +44.6% | +132.5% | -35.9% | ⚠️ Mixed |
 | E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | NIFTY 50 · 15-min | 602 | 51% | 1.05 | +11.1% | +19.6% | -14.7% | ⚠️ Mixed |
 | E04 | [Linear Gann Levels](backtests/E04_2026-10-31_Linear-Gann-Levels) | Adib Noorani (on Trading Titans by InCred Money) | Gold (XAUUSD) · 15-min | 735 | 52% | 1.06 | +16.7% | +102.0% | -21.7% | ⚠️ Mixed |
+| E05 | [21 EMA Pullback (+ RSI filter)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1238 | 49% | 1.02 | +8.3% | +19.6% | -16.3% | ⚠️ Mixed |
+| E05 | [21 EMA Pullback (as taught)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1372 | 49% | 1.04 | +13.8% | +19.6% | -15.0% | ⚠️ Mixed |
+| E05 | [21 EMA Pullback (wick SL)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1426 | 43% | 1.10 | +37.3% | +19.6% | -7.9% | ⚠️ Mixed |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).

@@ -1,0 +1,49 @@
+{
+  "title": "21 EMA Pullback",
+  "creator": "Priyank Sharma (HOLD with Priyank)",
+  "video_url": "https://www.youtube.com/watch?v=eKmr9Y8-bw0",
+  "symbols": ["NSE:NIFTY 50"],
+  "interval": "minute",
+  "timeframe_label": "5-min",
+  "start": "2023-10-26",
+  "end": "2026-10-26",
+  "warmup_days": 5,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 5,
+    "intraday": true,
+    "squareoff": "15:29"
+  },
+  "variants": {
+    "RULES": {
+      "label": "AS TAUGHT",
+      "params": {}
+    },
+    "RSI": {
+      "label": "+ RSI FILTER",
+      "board": "+ RSI filter",
+      "params": {"rsi": true}
+    },
+    "WICK": {
+      "label": "WICK SL",
+      "board": "wick SL",
+      "params": {"sl_mode": "wick"}
+    }
+  },
+  "grid": {
+    "pull_bars": [2, 3, 5],
+    "trig_bars": [1, 2, 3],
+    "near_pct": [0.05, 0.1, 99],
+    "sl_buf": [0, 2, 5],
+    "rr": [1.5, 2.0, 3.0],
+    "sl_mode": ["close", "wick"],
+    "rsi": [false, true]
+  },
+  "oos_months": 12,
+  "video": {
+    "breakeven": "sized"
+  }
+}

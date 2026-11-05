@@ -10,3 +10,6 @@ E03_2026-10-30_VWAP-Pivot-StochRSI [RELIANCE],VWAP + Pivots + Stoch RSI,Anish Si
 E04_2026-10-31_Linear-Gann-Levels [BTCUSDT],Linear Gann Levels,Adib Noorani (on Trading Titans by InCred Money),BINANCE:BTCUSDT,15-min,2023-10-26..2026-10-26,4138,50.7,1.02,44.6,13.8,-35.9,132.5,MIXED
 E04_2026-10-31_Linear-Gann-Levels [NIFTY_50],Linear Gann Levels,Adib Noorani (on Trading Titans by InCred Money),NSE:NIFTY 50,15-min,2023-10-26..2026-10-26,602,50.66,1.05,11.1,3.6,-14.7,19.6,MIXED
 E04_2026-10-31_Linear-Gann-Levels [XAUUSD],Linear Gann Levels,Adib Noorani (on Trading Titans by InCred Money),DUKAS:XAUUSD,15-min,2023-10-26..2026-10-26,735,51.56,1.06,16.7,5.3,-21.7,102.0,MIXED
+E05_2026-11-01_21-EMA-Pullback [RSI],21 EMA Pullback (+ RSI filter),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1238,49.19,1.02,8.3,2.4,-16.3,19.6,MIXED
+E05_2026-11-01_21-EMA-Pullback [RULES],21 EMA Pullback (as taught),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1372,49.42,1.04,13.8,4.1,-15.0,19.6,MIXED
+E05_2026-11-01_21-EMA-Pullback [WICK],21 EMA Pullback (wick SL),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1426,42.71,1.1,37.3,10.9,-7.9,19.6,MIXED

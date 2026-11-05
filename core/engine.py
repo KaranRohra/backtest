@@ -218,6 +218,8 @@ def stats(trades: pd.DataFrame, eq: pd.Series, bench: pd.Series | None = None) -
             if "sl" in trades:  # cost per trade (price points) at which avg R hits zero
                 risk = (trades.entry_price - trades.sl).abs()
                 out["breakeven_cost_pts"] = float(trades.r.mean() / (1 / risk).mean())
+                # same, at the position sizes actually traded (differs when the leverage cap shrinks most positions)
+                out["breakeven_cost_pts_sized"] = float(trades.pnl.sum() / trades.qty.sum())
     if bench is not None:
         b = bench.loc[eq.index[0] : eq.index[-1]]
         out |= {
