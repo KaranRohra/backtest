@@ -51,7 +51,7 @@ def sensitivity(data, strat, params, settings, start, grid):
 
 def update_scoreboard(ep, cfg, symbols, tag, st, v):
     row = {"episode": ep.name + (f" [{tag}]" if tag else ""), "strategy": cfg["title"],
-           "creator": cfg.get("creator", ""), "symbols": " ".join(symbols), "interval": cfg.get("timeframe_label", cfg["interval"]), "period": f"{st['start']}..{st['end']}",
+           "creator": cfg.get("creator", ""), "symbols": cfg.get("market") or " ".join(symbols), "interval": cfg.get("timeframe_label", cfg["interval"]), "period": f"{st['start']}..{st['end']}",
            "trades": st["n_trades"], "win_rate_pct": round(st.get("win_rate_pct", 0), 2),
            "profit_factor": round(st.get("profit_factor", 0), 2), "return_pct": round(st["total_return_pct"], 1),
            "cagr_pct": round(st["cagr_pct"], 1), "max_dd_pct": round(st["max_drawdown_pct"], 1),
@@ -85,18 +85,20 @@ def run_one(ep, cfg, strat, symbols, tag, variant=None):
     """One backtest over `symbols`; outputs go to results/<tag>/. Returns what the video needs.
 
     `variant` ({"label", "params", "grid", "board"}) runs the same market with different rules, e.g. all setups vs
-    filtered. "board" is the variant's name on the leaderboard (default: the label in lower case)."""
+    filtered. "board" is the variant's name on the leaderboard (default: the label in lower case). A variant can
+    also bring its own "symbols" (a portfolio), "settings", "benchmark", "market" (leaderboard market name) and
+    "scoreboard": false (shown in the video, left off the leaderboard)."""
     # per-symbol overrides, e.g. {"overrides": {"DUKAS:XAUUSD": {"params": {...}, "settings": {...}, "grid": {...}}}}
     ov = cfg.get("overrides", {}).get(symbols[0], {}) if len(symbols) == 1 else {}
     var = variant or {}
     params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {}), **ov.get("params", {}), **var.get("params", {})}
-    settings = Settings(**{**cfg.get("settings", {}), **ov.get("settings", {})})
+    settings = Settings(**{**cfg.get("settings", {}), **ov.get("settings", {}), **var.get("settings", {})})
     grid = var.get("grid", ov.get("grid", cfg.get("grid")))
     start, end = window(cfg)
     fetch_from = start - timedelta(days=cfg.get("warmup_days", 0))
 
     data = {s: get_candles(s, cfg["interval"], fetch_from, end) for s in symbols}
-    bsym = symbols[0] if tag else cfg.get("benchmark", symbols[0])
+    bsym = var.get("benchmark") or (symbols[0] if tag else cfg.get("benchmark", symbols[0]))
     bdf = data.get(bsym) if bsym in data else get_candles(bsym, cfg["interval"], fetch_from, end)
 
     trades, eq = backtest(data, strat, params, settings, start)
@@ -143,7 +145,9 @@ def run_one(ep, cfg, strat, symbols, tag, variant=None):
     if grid:
         md += ["", "## Parameter sensitivity (one at a time)", "", sens.round(2).to_markdown(index=False)]
     (res / "summary.md").write_text("\n".join(md) + "\n")
-    update_scoreboard(ep, {**cfg, "title": f"{cfg['title']} ({var.get('board', var['label'].lower())})"} if var else cfg, symbols, tag, full, v)
+    board = {**cfg, "title": f"{cfg['title']} ({var.get('board', var['label'].lower())})", "market": var.get("market")}
+    if var.get("scoreboard", True):  # e.g. best/worst-case runs shown in the video but not on the leaderboard
+        update_scoreboard(ep, board if var else cfg, symbols, tag, full, v)
     print("\n".join(md), "\n")
     return {"name": names, "symbols": symbols, "eq": eq, "bh": bh, "stats": full, "verdict": v}
 
@@ -161,7 +165,8 @@ def main():
         (ep / "config.json").write_text(json.dumps(cfg, indent=2) + "\n")
     strat = load_strategy(ep)
     if cfg.get("variants"):  # one market, several rule sets side by side (e.g. all setups vs filtered)
-        results = [run_one(ep, cfg, strat, cfg["symbols"], tag, var) for tag, var in cfg["variants"].items()]
+        results = [run_one(ep, cfg, strat, var.get("symbols", cfg["symbols"]), tag, var)
+                   for tag, var in cfg["variants"].items()]
     elif cfg.get("separate"):  # each symbol is its own backtest; the video compares them
         results = [run_one(ep, cfg, strat, [s], s.split(":")[1].replace(" ", "_")) for s in cfg["symbols"]]
     else:

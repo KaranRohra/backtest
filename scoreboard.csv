@@ -13,3 +13,4 @@ E04_2026-10-31_Linear-Gann-Levels [XAUUSD],Linear Gann Levels,Adib Noorani (on T
 E05_2026-11-01_21-EMA-Pullback [RSI],21 EMA Pullback (+ RSI filter),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1238,49.19,1.02,8.3,2.4,-16.3,19.6,MIXED
 E05_2026-11-01_21-EMA-Pullback [RULES],21 EMA Pullback (as taught),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1372,49.42,1.04,13.8,4.1,-15.0,19.6,MIXED
 E05_2026-11-01_21-EMA-Pullback [WICK],21 EMA Pullback (wick SL),Priyank Sharma (HOLD with Priyank),NSE:NIFTY 50,5-min,2023-10-26..2026-10-26,1426,42.71,1.1,37.3,10.9,-7.9,19.6,MIXED
+E06_2026-11-07_MTF-Weekly-Fakeout [NIFTY500],MTF Weekly Fakeout (Nifty 500 stocks),Priyank Sharma (HOLD with Priyank),Nifty 500 stocks (500),weekly · daily · 15-min,2023-10-26..2026-10-26,1353,50.26,1.0,-0.5,0.3,-21.0,30.4,FAILS

@@ -149,9 +149,48 @@ def backtest(data: dict[str, pd.DataFrame], strategy, params: dict, s: Settings,
         all_trades.append(t)
         curves.append(eq)
     eq = pd.concat(curves, axis=1).sort_index().ffill()
-    eq = eq.fillna(per.capital).sum(axis=1).rename("equity")
     trades = pd.concat(all_trades, ignore_index=True) if any(len(t) for t in all_trades) else pd.DataFrame()
+    if s.extra.get("max_positions") and len(trades) and "sl" in trades:
+        return shared_capital(trades, eq.index, s)
+    eq = eq.fillna(per.capital).sum(axis=1).rename("equity")
     return trades, eq
+
+
+def shared_capital(trades: pd.DataFrame, index: pd.DatetimeIndex, s: Settings):
+    """Replay every symbol's trades on ONE account (settings.extra["max_positions"] = N).
+
+    Trades are taken in entry order while fewer than N are open; later signals are skipped. Signals at the same
+    moment are taken in a random order (settings.extra["seed"], default 0) so no symbol gets priority by name.
+    Each trade risks s.size of current equity, and its value is capped at equity / N (no leverage). P&L is booked
+    at the exit.
+    """
+    n = int(s.extra["max_positions"])
+    tie = np.random.default_rng(int(s.extra.get("seed", 0))).random(len(trades))
+    t = trades.assign(_tie=tie).sort_values(["entry_time", "_tie"]).drop(columns="_tie").reset_index(drop=True)
+    side = t.side.map({"LONG": 1, "SHORT": -1}).to_numpy()
+    events = sorted([(x, 0, i) for i, x in enumerate(t.exit_time)] + [(x, 1, i) for i, x in enumerate(t.entry_time)])
+    equity, open_, qty, pnl = s.capital, set(), {}, {}
+    for _, kind, i in events:  # exits before entries at the same time
+        if kind == 0:
+            if i in open_:
+                open_.discard(i)
+                pnl[i] = side[i] * qty[i] * (t.exit_price[i] - t.entry_price[i])
+                equity += pnl[i]
+        elif len(open_) < n:
+            per_share = abs(t.entry_price[i] - t.sl[i])
+            qty[i] = min(equity * s.size / per_share, equity / n / t.entry_price[i]) if per_share > 0 else 0
+            if t.exit_time[i] <= t.entry_time[i]:  # in and out in the same candle: settle now
+                pnl[i] = side[i] * qty[i] * (t.exit_price[i] - t.entry_price[i])
+                equity += pnl[i]
+            else:
+                open_.add(i)
+    taken = t.loc[sorted(pnl)].copy()
+    taken["qty"], taken["pnl"] = [qty[i] for i in taken.index], [pnl[i] for i in taken.index]
+    booked = taken.groupby("exit_time").pnl.sum().reindex(index, fill_value=0.0)
+    eq = (s.capital + booked.cumsum()).rename("equity")
+    # start the curve at the starting capital, even if a trade closes on the very first bar
+    eq = pd.concat([pd.Series([s.capital], index=[index[0] - pd.Timedelta(seconds=1)]), eq]).rename("equity")
+    return taken.reset_index(drop=True), eq
 
 
 def risk_qty(equity: float, entry: float, stop: float, s: Settings) -> float:

@@ -3,9 +3,10 @@
     from core.datastore import get_candles
     df = get_candles("NSE:NIFTY 50", "5minute", "2023-10-01", "2026-10-24")
 
-Only two intervals are stored on disk - "day" and "minute" - under
-data/<interval>/<EXCH>_<SYMBOL>.parquet. Every other intraday interval is
-resampled from minute candles on load (Kite-aligned: 09:15 session start).
+Three intervals are stored on disk - "day", "minute" and "15minute" - under
+data/<interval>/<EXCH>_<SYMBOL>.parquet. "15minute" is fetched directly for wide stock universes (15x
+less data than minute); every other intraday interval is resampled from minute candles on load
+(Kite-aligned: 09:15 session start).
 data/<interval>/_meta.json records which date range was already requested per
 symbol, so a re-run only fetches what is missing (usually nothing).
 
@@ -23,8 +24,8 @@ import pandas as pd
 
 from core.paths import DATA, INSTRUMENTS_CSV
 
-STORED = {"day": 2000, "minute": 60}  # max days per Kite request
-RESAMPLED = {"3minute": 3, "5minute": 5, "10minute": 10, "15minute": 15, "30minute": 30, "60minute": 60}
+STORED = {"day": 2000, "minute": 60, "15minute": 200}  # max days per Kite request
+RESAMPLED = {"3minute": 3, "5minute": 5, "10minute": 10, "30minute": 30, "60minute": 60}
 SESSION_OPEN_MIN = 9 * 60 + 15
 COLS = ["open", "high", "low", "close", "volume", "oi"]
 REQUEST_GAP = 0.35  # seconds between calls, keeps us under Kite's 3 req/s

@@ -23,6 +23,7 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 | E05 | [21 EMA Pullback (+ RSI filter)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1238 | 49% | 1.02 | +8.3% | +19.6% | -16.3% | ⚠️ Mixed |
 | E05 | [21 EMA Pullback (as taught)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1372 | 49% | 1.04 | +13.8% | +19.6% | -15.0% | ⚠️ Mixed |
 | E05 | [21 EMA Pullback (wick SL)](backtests/E05_2026-11-01_21-EMA-Pullback) | Priyank Sharma (HOLD with Priyank) | NIFTY 50 · 5-min | 1426 | 43% | 1.10 | +37.3% | +19.6% | -7.9% | ⚠️ Mixed |
+| E06 | [MTF Weekly Fakeout (Nifty 500 stocks)](backtests/E06_2026-11-07_MTF-Weekly-Fakeout) | Priyank Sharma (HOLD with Priyank) | Nifty 500 stocks (500) · weekly · daily · 15-min | 1353 | 50% | 1.00 | -0.5% | +30.4% | -21.0% | ❌ Fails |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).
