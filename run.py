@@ -91,6 +91,8 @@ def run_one(ep, cfg, strat, symbols, tag, variant=None):
     # per-symbol overrides, e.g. {"overrides": {"DUKAS:XAUUSD": {"params": {...}, "settings": {...}, "grid": {...}}}}
     ov = cfg.get("overrides", {}).get(symbols[0], {}) if len(symbols) == 1 else {}
     var = variant or {}
+    # a variant can test another timeframe / window, e.g. daily stocks next to 1-min index (E07)
+    cfg = {**cfg, **{k: var[k] for k in ("interval", "start", "end", "warmup_days", "timeframe_label") if k in var}}
     params = {**getattr(strat, "PARAMS", {}), **cfg.get("params", {}), **ov.get("params", {}), **var.get("params", {})}
     settings = Settings(**{**cfg.get("settings", {}), **ov.get("settings", {}), **var.get("settings", {})})
     grid = var.get("grid", ov.get("grid", cfg.get("grid")))

@@ -1,0 +1,205 @@
+{
+  "title": "Grandfather-Father-Son RSI",
+  "creator": "Vishal Malkan",
+  "video_url": "https://www.youtube.com/watch?v=s63l6K_ggCM",
+  "uploaded_by": "Pushkar Raj Thakur: Stock Market Educator",
+  "symbols": [
+    "NSE:ADANIENT",
+    "NSE:ADANIPORTS",
+    "NSE:APOLLOHOSP",
+    "NSE:ASIANPAINT",
+    "NSE:AXISBANK",
+    "NSE:BSE",
+    "NSE:BAJAJ-AUTO",
+    "NSE:BAJFINANCE",
+    "NSE:BAJAJFINSV",
+    "NSE:BEL",
+    "NSE:BHARTIARTL",
+    "NSE:CIPLA",
+    "NSE:COALINDIA",
+    "NSE:DRREDDY",
+    "NSE:EICHERMOT",
+    "NSE:ETERNAL",
+    "NSE:GRASIM",
+    "NSE:HCLTECH",
+    "NSE:HDFCBANK",
+    "NSE:HDFCLIFE",
+    "NSE:HINDALCO",
+    "NSE:HINDUNILVR",
+    "NSE:ICICIBANK",
+    "NSE:ITC",
+    "NSE:INFY",
+    "NSE:INDIGO",
+    "NSE:JSWSTEEL",
+    "NSE:JIOFIN",
+    "NSE:KOTAKBANK",
+    "NSE:LT",
+    "NSE:M&M",
+    "NSE:MARUTI",
+    "NSE:MAXHEALTH",
+    "NSE:NTPC",
+    "NSE:NESTLEIND",
+    "NSE:ONGC",
+    "NSE:POWERGRID",
+    "NSE:RELIANCE",
+    "NSE:SBILIFE",
+    "NSE:SHRIRAMFIN",
+    "NSE:SBIN",
+    "NSE:SUNPHARMA",
+    "NSE:TCS",
+    "NSE:TATACONSUM",
+    "NSE:TMPV",
+    "NSE:TATASTEEL",
+    "NSE:TECHM",
+    "NSE:TITAN",
+    "NSE:TRENT",
+    "NSE:ULTRACEMCO"
+  ],
+  "benchmark": "NSE:NIFTY 50",
+  "interval": "day",
+  "timeframe_label": "monthly · weekly · daily",
+  "start": "2016-10-26",
+  "end": "2026-10-26",
+  "warmup_days": 2200,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 1,
+    "extra": {
+      "max_positions": 10,
+      "seed": 0
+    }
+  },
+  "variants": {
+    "NIFTY50_STOCKS": {
+      "label": "NIFTY 50 STOCKS",
+      "board": "Nifty 50 stocks · monthly/weekly/daily",
+      "market": "Nifty 50 stocks (50)",
+      "benchmark": "NSE:NIFTY 50",
+      "grid": {
+        "band_lo": [
+          37,
+          39
+        ],
+        "band_hi": [
+          42,
+          45
+        ],
+        "live_htf": [
+          true,
+          false
+        ],
+        "touch_bars": [
+          1,
+          2,
+          3
+        ],
+        "need_pullback": [
+          false,
+          true
+        ],
+        "htf_level": [
+          55,
+          60
+        ],
+        "exit_level": [
+          55,
+          60,
+          65
+        ],
+        "allow_short": [
+          true,
+          false
+        ]
+      }
+    },
+    "NIFTY_1MIN": {
+      "label": "NIFTY 50 · 1-MIN",
+      "board": "Nifty 50 index · 15/5/1-min",
+      "symbols": [
+        "NSE:NIFTY 50"
+      ],
+      "benchmark": "NSE:NIFTY 50",
+      "interval": "minute",
+      "start": "2023-10-26",
+      "end": "2026-10-26",
+      "warmup_days": 10,
+      "timeframe_label": "15-min · 5-min · 1-min",
+      "params": {
+        "frames": "15-5-1"
+      },
+      "settings": {
+        "sizing": "risk",
+        "size": 0.01,
+        "max_leverage": 5,
+        "squareoff": "15:15",
+        "extra": {}
+      },
+      "grid": {
+        "band_lo": [
+          37,
+          39
+        ],
+        "band_hi": [
+          42,
+          45
+        ],
+        "live_htf": [
+          true,
+          false
+        ]
+      }
+    },
+    "BANKNIFTY_1MIN": {
+      "label": "BANK NIFTY · 1-MIN",
+      "board": "Bank Nifty index · 15/5/1-min",
+      "symbols": [
+        "NSE:NIFTY BANK"
+      ],
+      "benchmark": "NSE:NIFTY BANK",
+      "interval": "minute",
+      "start": "2023-10-26",
+      "end": "2026-10-26",
+      "warmup_days": 10,
+      "timeframe_label": "15-min · 5-min · 1-min",
+      "params": {
+        "frames": "15-5-1"
+      },
+      "settings": {
+        "sizing": "risk",
+        "size": 0.01,
+        "max_leverage": 5,
+        "squareoff": "15:15",
+        "extra": {}
+      },
+      "grid": {
+        "band_lo": [
+          37,
+          39
+        ],
+        "band_hi": [
+          42,
+          45
+        ],
+        "live_htf": [
+          true,
+          false
+        ]
+      }
+    }
+  },
+  "labels": {
+    "NIFTY 50": "NIFTY",
+    "NIFTY BANK": "BANK NIFTY"
+  },
+  "oos_months": 12,
+  "video": {
+    "sources": [
+      "Data: NSE NIFTY 50 stocks, NIFTY 50 and NIFTY BANK (Zerodha Kite)"
+    ],
+    "subtitle": "Vishal Malkan · stocks daily 2016–26 · index 1-min 2023–26",
+    "note": "Zero costs assumed. The profit disappears at ~0.2% of price per trade on stocks (delivery STT alone is 0.2%), ~1.2 pts on NIFTY and ~1.8 pts on BANK NIFTY (futures STT alone ≈ 5 / 11 pts)."
+  }
+}
