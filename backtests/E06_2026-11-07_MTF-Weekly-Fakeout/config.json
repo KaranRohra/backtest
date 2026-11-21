@@ -61,6 +61,26 @@
       "scoreboard": false,
       "market": "Nifty 500 stocks (500)",
       "benchmark": "NSE:NIFTY 500"
+    },
+    "XAUUSD": {
+      "label": "GOLD",
+      "board": "gold",
+      "symbols": ["DUKAS:XAUUSD"],
+      "benchmark": "DUKAS:XAUUSD",
+      "market": "DUKAS:XAUUSD",
+      "interval": "minute",
+      "params": {"session": "fx"},
+      "settings": {"extra": {}}
+    },
+    "BTCUSDT": {
+      "label": "BITCOIN",
+      "board": "Bitcoin",
+      "symbols": ["BINANCE:BTCUSDT"],
+      "benchmark": "BINANCE:BTCUSDT",
+      "market": "BINANCE:BTCUSDT",
+      "interval": "minute",
+      "params": {"session": "utc"},
+      "settings": {"extra": {}}
     }
   },
   "grid": {

@@ -15,6 +15,7 @@
   - Trades last 2 days at the median, as he says.
   - Short setups averaged +0.08R and long setups +0.02R.
 - **Market:** all **500 stocks of today's Nifty 500**, traded from one ₹1 lakh account.
+- **Added on viewer request (Nov 2026):** the same rules on **spot gold (XAUUSD)** and **Bitcoin (BTC/USDT)**, each tested on its own. See [Viewer request: gold and Bitcoin](#viewer-request-gold-xauusd-and-bitcoin-btcusdt).
 
 The video shows three of the 20 runs side by side: the middle run, the best and the worst.
 
@@ -87,6 +88,48 @@ Files:
   - `equity.csv`: daily equity vs NIFTY 500
   - `stats.json`: everything above, machine-readable
   - `seeds.csv`: the 20 runs
+- `results/XAUUSD/` and `results/BTCUSDT/`: the gold and Bitcoin tests (same files; trade times in UTC)
+
+## Viewer request: gold (XAUUSD) and Bitcoin (BTC/USDT)
+A viewer asked how the same rules do on gold and crypto. The videos say the setup "works in index too" (BKM 02:00); gold and Bitcoin aren't mentioned, so this is an extension, not a claim from the videos.
+
+- Same code, same settings as the stock test (swing = 1 candle each side, stop 0.1% beyond the fakeout extreme, 50% booked at 1:1, rest to the previous week's level, 10-day time exit).
+- Each market is its **own ₹1 lakh account** with one trade at a time, so there's no slot lottery here: every signal is taken. Each trade risks 1% of equity, and the position is at most 100% of the account (no leverage).
+- **Gold:** Dukascopy spot XAUUSD, 1-min bid prices built into 15-min candles. A trading day runs from one 17:00 New York close to the next (the broker day, as on TradingView's forex charts), so the week is Monday to Friday.
+- **Bitcoin:** Binance BTC/USDT spot, 1-min trades built into 15-min candles. The day is the UTC calendar day and the week runs Monday to Sunday (Binance's default). Setups count on Monday to Thursday, as for stocks; the weekend is part of the weekly high/low.
+
+| Equity + stats | Drawdown |
+|---|---|
+| ![Gold and Bitcoin: equity and stats](images/gold_btc_results.png) | ![Gold and Bitcoin: drawdown](images/gold_btc_drawdown.png) |
+
+**Results, 26 Oct 2023 → 26 Oct 2026, before costs:**
+
+| | Gold (XAUUSD) | Bitcoin (BTC/USDT) |
+|---|---:|---:|
+| Trades | 65 (1.8 a month) | 75 (2.1 a month) |
+| Win rate (trade ends in profit) | 48% | 49% |
+| Reached the 1:1 target | 46% | 47% |
+| Avg win / avg loss | +1.32R / −1.00R | +1.15R / −0.97R |
+| Average per trade | +0.11R · +0.21% of price | +0.08R · +0.06% of price |
+| Profit factor | 1.26 | 1.18 |
+| Return | +7.1% (₹1,00,000 → ₹1,07,104) | +6.5% (₹1,00,000 → ₹1,06,485) |
+| Buy & hold | +102.0% | +132.5% |
+| Max drawdown (daily closes) | −5.7% | −7.3% |
+| Buy & hold max drawdown | −27.7% | −53.0% |
+| Worst losing streak | 5 | 4 |
+| Last 12 months (out-of-sample) | +7.7%, PF 1.29 (25 trades) | +3.4%, PF 1.33 (25 trades) |
+| Longs / shorts (avg R) | +0.21 / +0.01 | +0.21 / −0.01 |
+| Year by year (R) | 2023 (Oct–Dec) +3.3 · 2024 −3.6 · 2025 +3.5 · 2026 +3.8 | 2023 (Oct–Dec) −3.5 · 2024 +1.9 · 2025 +9.0 · 2026 −1.8 |
+| Median stop-loss | 1.2% of price | 2.2% of price |
+| Median holding time | 1.8 days | 2.3 days |
+| In a trade | 21% of the time | 21% of the time |
+
+- **Costs** (not included):
+  - Gold: a typical spot spread of $0.20–0.40 is about 0.01% of price, against +0.21% per trade.
+  - Bitcoin: Binance's standard spot fee is 0.1% per side, 0.2% for the round trip, against +0.06% per trade.
+  - Short trades need a product that allows shorting (futures, CFDs or margin), which adds funding or overnight costs. Those aren't modelled.
+- **Sensitivity** (one setting changed at a time, `results/XAUUSD/summary.md` and `results/BTCUSDT/summary.md`): gold returns ranged +4.4% to +19.6% and Bitcoin +4.1% to +18.6%, all positive and all far below buy & hold.
+- **Replication:** all the worked examples in the videos are Indian stocks, so there is no gold or Bitcoin chart to check against. The code is the same one that matched 6 of the 7 stock examples.
 
 ## Rules as stated in the videos
 1. **Three timeframes, fixed:** weekly to read the crowd, daily to select stocks, 15-min to enter (BKM 04:00–05:00).
@@ -136,7 +179,7 @@ Before running 3 years, we ran the code on every example he walks through with d
 | 9 | Stop and target touched in the same 15-min candle | Stop counted first | Conservative |
 
 ## Data & limitations
-- **Data:** Zerodha Kite 15-minute candles, 2023-10-26 → 2026-10-26. On a check stock (Adani Enterprises, 17,339 bars) they match 15-min candles built from 1-min data, to within 0.03%.
+- **Data:** Zerodha Kite 15-minute candles, 2023-10-26 → 2026-10-26. Gold: Dukascopy 1-min XAUUSD bid prices (UTC). Bitcoin: Binance 1-min BTC/USDT spot trades from its public data archive (UTC). On a check stock (Adani Enterprises, 17,339 bars) they match 15-min candles built from 1-min data, to within 0.03%.
   - Stocks are split and bonus adjusted.
   - TMPV carries the pre-demerger Tata Motors history; TMCV is tested from its Nov 2025 listing.
 - **Costs are zero** (series rule), so results are before brokerage, taxes, spread and slippage. **This decides the verdict:**
@@ -154,4 +197,4 @@ Before running 3 years, we ran the code on every example he walks through with d
 python run.py E06_2026-11-07_MTF-Weekly-Fakeout --no-video
 python backtests/E06_2026-11-07_MTF-Weekly-Fakeout/robustness.py
 ```
-Needs Kite 15-min data for the 500 stocks.
+Needs Kite 15-min data for the 500 stocks. `run.py` also runs the gold and Bitcoin tests (the `XAUUSD` and `BTCUSDT` variants in config.json); their data is free (Dukascopy and Binance's public archive) and downloads on first run.

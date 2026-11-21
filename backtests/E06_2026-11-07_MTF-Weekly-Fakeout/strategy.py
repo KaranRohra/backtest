@@ -16,6 +16,11 @@ Rules (see README.md for where each comes from and what we had to assume):
 Checked against the creator's own example (CUMMINS INDIA, 14-23 Oct 2024) before running - see README.
 Simulated on Kite's 15-min candles (1-min data also works: it is resampled to 15-min); the daily close is the
 day's last traded price.
+
+Sessions (added for viewer requests: gold and Bitcoin): "nse" = the IST calendar day (Kite timestamps).
+"fx" (spot gold) = the broker day from one 17:00 New York close to the next, so Monday-Friday are the trading days
+and the week has no Sunday stub. "utc" (Bitcoin) = the UTC calendar day, Monday-Sunday weeks, as on Binance.
+Trade times are always reported in the data's own clock (IST for NSE, UTC for gold and Bitcoin).
 """
 import numpy as np
 import pandas as pd
@@ -30,7 +35,15 @@ PARAMS = {
     "partial": 0.5,  # share booked at 1R (stop then moves to entry); 0 = no partial, all runs to the weekly level
     "min_room_r": 1.0,  # skip unless the previous week's opposite level is this many R away (R to the extreme)
     "max_days": 10,  # time exit: close the trade at the close of this trading day after entry
+    "session": "nse",  # "nse", "fx" (gold) or "utc" (Bitcoin): where a trading day starts, see the docstring
 }
+
+
+def _clock(idx, session):
+    """Timestamps on the session's clock, so that each trading day starts at 00:00."""
+    if session == "fx":  # broker day: 17:00 New York -> 00:00
+        return idx.tz_localize("UTC").tz_convert("America/New_York").tz_localize(None) + pd.Timedelta(hours=7)
+    return idx
 
 
 def _pivots(x, k, low):
@@ -109,6 +122,16 @@ def _entry(b, o, h, l, c, piv_lo, piv_hi, side, level, w0, setup_end, next_end, 
 
 
 def simulate(df, p, s, symbol, trade_from=None):
+    src = df.index  # the data's own clock: trade times are reported on it
+    clk = _clock(src, p.get("session", "nse"))
+    if p.get("session", "nse") != "nse":
+        df = df.set_axis(clk)
+        if trade_from is not None:
+            trade_from = _clock(pd.DatetimeIndex([pd.Timestamp(trade_from)]), p["session"])[0]
+
+    def back(t):  # a 15-min bar's label -> the first source candle inside it (always present in the data)
+        return src[min(clk.searchsorted(t), len(src) - 1)]
+
     sig, b = setups(df, p)
     idx = b.index
     o, h, l, c = (b[k].to_numpy(float) for k in ("open", "high", "low", "close"))
@@ -176,8 +199,8 @@ def simulate(df, p, s, symbol, trade_from=None):
         pnl = side * qty * (px - entry)
         equity += pnl
         trades.append(dict(
-            symbol=symbol, side="LONG" if side > 0 else "SHORT", entry_time=idx[i0], entry_price=entry,
-            exit_time=idx[k_end], exit_price=px, qty=qty, pnl=pnl, ret_pct=side * (px / entry - 1) * 100,
+            symbol=symbol, side="LONG" if side > 0 else "SHORT", entry_time=back(idx[i0]), entry_price=entry,
+            exit_time=back(idx[k_end]), exit_price=px, qty=qty, pnl=pnl, ret_pct=side * (px / entry - 1) * 100,
             bars=k_end - i0 + 1, exit_reason="+".join(dict.fromkeys(e[3] for e in exits)), r=side * (px - entry) / risk,
             sl=stop, target=r.target, setup_day=r.setup_day, swing=r.swing, fakeout_extreme=r.ext))
         busy_until = k_end - 1 if exits[-1][3] == "reversed" else k_end
