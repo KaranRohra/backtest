@@ -147,9 +147,9 @@ def run_one(ep, cfg, strat, symbols, tag, variant=None):
     if grid:
         md += ["", "## Parameter sensitivity (one at a time)", "", sens.round(2).to_markdown(index=False)]
     (res / "summary.md").write_text("\n".join(md) + "\n")
-    board = {**cfg, "title": f"{cfg['title']} ({var.get('board', var['label'].lower())})", "market": var.get("market")}
+    board = {**cfg, "title": f"{cfg['title']} ({var.get('board', var['label'].lower())})", "market": var.get("market")} if var else cfg
     if var.get("scoreboard", True):  # e.g. best/worst-case runs shown in the video but not on the leaderboard
-        update_scoreboard(ep, board if var else cfg, symbols, tag, full, v)
+        update_scoreboard(ep, board, symbols, tag, full, v)
     print("\n".join(md), "\n")
     return {"name": names, "symbols": symbols, "eq": eq, "bh": bh, "stats": full, "verdict": v}
 

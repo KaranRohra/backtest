@@ -1,0 +1,81 @@
+{
+  "title": "5-20 EMA Crossover",
+  "creator": "Abhishek (AbhishekXTrades)",
+  "video_url": "https://www.youtube.com/watch?v=AgDZVDuxrec",
+  "symbols": [
+    "NSE:NIFTY 50"
+  ],
+  "interval": "minute",
+  "timeframe_label": "5-min",
+  "start": "2023-10-27",
+  "end": "2026-10-27",
+  "warmup_days": 5,
+  "params": {},
+  "settings": {
+    "capital": 100000,
+    "sizing": "risk",
+    "size": 0.01,
+    "max_leverage": 5,
+    "intraday": true,
+    "squareoff": "15:20"
+  },
+  "grid": {
+    "rr": [
+      1.5,
+      2.0,
+      3.0
+    ],
+    "sl_mode": [
+      "candle",
+      "swing"
+    ],
+    "half_above_pct": [
+      0.1,
+      0.2,
+      99
+    ],
+    "trig_bars": [
+      1,
+      2,
+      3
+    ],
+    "max_run": [
+      1,
+      2,
+      3
+    ],
+    "last_entry": [
+      "11:30",
+      "13:00",
+      "15:00"
+    ],
+    "touch_pct": [
+      0.0,
+      0.005,
+      0.01
+    ],
+    "buf_pct": [
+      0.0,
+      0.006,
+      0.02
+    ]
+  },
+  "oos_months": 12,
+  "variants": {
+    "RULES": {
+      "label": "AS TAUGHT",
+      "params": {}
+    },
+    "MORNING": {
+      "label": "MORNING ONLY",
+      "board": "morning only",
+      "params": {
+        "last_entry": "11:30"
+      },
+      "grid": {}
+    }
+  },
+  "video": {
+    "breakeven": "sized"
+  }
+}

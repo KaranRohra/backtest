@@ -27,6 +27,8 @@ Each episode takes one strategy from a YouTube video, writes its rules down as e
 | E07 | [Grandfather-Father-Son RSI (Bank Nifty index · 15/5/1-min)](backtests/E07_2026-11-13_Grandfather-Father-Son-RSI) | Vishal Malkan | NIFTY BANK · 15-min · 5-min · 1-min | 1309 | 36% | 1.10 | +23.6% | +27.4% | -16.0% | ⚠️ Mixed |
 | E07 | [Grandfather-Father-Son RSI (Nifty 50 stocks · monthly/weekly/daily)](backtests/E07_2026-11-13_Grandfather-Father-Son-RSI) | Vishal Malkan | Nifty 50 stocks (50) · monthly · weekly · daily | 418 | 38% | 1.09 | +7.9% | +164.1% | -11.6% | ⚠️ Mixed |
 | E07 | [Grandfather-Father-Son RSI (Nifty 50 index · 15/5/1-min)](backtests/E07_2026-11-13_Grandfather-Father-Son-RSI) | Vishal Malkan | NIFTY 50 · 15-min · 5-min · 1-min | 1535 | 38% | 1.19 | +45.5% | +19.6% | -5.9% | ⚠️ Mixed |
+| E08 | [5-20 EMA Crossover (morning only)](backtests/E08_2026-11-20_5-20-EMA-Crossover) | Abhishek (AbhishekXTrades) | NIFTY 50 · 5-min | 424 | 37% | 1.17 | +26.7% | +20.1% | -10.2% | ⚠️ Mixed |
+| E08 | [5-20 EMA Crossover (as taught)](backtests/E08_2026-11-20_5-20-EMA-Crossover) | Abhishek (AbhishekXTrades) | NIFTY 50 · 5-min | 641 | 35% | 1.11 | +24.3% | +20.1% | -13.8% | ⚠️ Mixed |
 <!-- leaderboard:end -->
 
 All results are **before costs** (brokerage, STT, slippage). Each backtest's README says how much those costs would change the result. Verdict rules: [methodology](docs/methodology.md#verdict-scale).
